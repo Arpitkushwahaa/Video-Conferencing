@@ -6,10 +6,21 @@ import { usePathname } from 'next/navigation';
 import { navLinks } from '@/constants';
 import { neobrutalism } from '@clerk/themes'
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 
 const NavBar = () => {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
 
     return (
         <>
@@ -24,8 +35,8 @@ const NavBar = () => {
                 />
               </Link>
 
-              {/* Nav Links */}
-              <section className="sticky top-0 flex justify-between text-black ">
+              {/* Nav Links - Desktop */}
+              <section className="sticky top-0 flex justify-between text-black max-md:hidden">
                 <div className="flex flex-1 max-sm:gap-0 sm:gap-6">
                   {navLinks.map((item) => {
                     const isActive = pathname === item.route || pathname.startsWith(`${item.route}/`);
@@ -60,6 +71,21 @@ const NavBar = () => {
                 </div>
               </section>
 
+              {/* Mobile Hamburger Menu */}
+              <div className="md:hidden">
+                <button
+                  onClick={toggleMenu}
+                  className="p-2 rounded-lg hover:bg-gray-300 transition-colors"
+                  aria-label="Toggle menu"
+                >
+                  {isMenuOpen ? (
+                    <X size={24} className="text-black" />
+                  ) : (
+                    <Menu size={24} className="text-black" />
+                  )}
+                </button>
+              </div>
+
               {/* User button */}
               <div className='hover:scale-150 duration-500 '>
                 <SignedIn>
@@ -73,6 +99,43 @@ const NavBar = () => {
         
               </div>
           </nav>
+
+          {/* Mobile Menu Overlay */}
+          {isMenuOpen && (
+            <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={closeMenu}>
+              <div className="fixed top-28 left-0 right-0 bg-gray-200 shadow-2xl">
+                <div className="flex flex-col py-4">
+                  {navLinks.map((item) => {
+                    const isActive = pathname === item.route || pathname.startsWith(`${item.route}/`);
+                    
+                    return (
+                      <Link
+                        href={item.route}
+                        key={item.label}
+                        onClick={closeMenu}
+                        className={
+                          cn('flex items-center gap-4 px-10 py-4 text-black hover:bg-gray-300 transition-colors',
+                            isActive && 'bg-blue-100'
+                          )
+                        }
+                      >
+                        <Image
+                          src={item.imgURL}
+                          alt={item.label}
+                          width={24}
+                          height={24}
+                        />
+                        
+                        <span className="text-lg font-semibold">
+                          {item.label}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
         </>
     )
 }
