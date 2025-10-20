@@ -12,11 +12,11 @@ import { useState } from "react";
 
 const MeetingPage = () => {
     const { id } = useParams<{ id: string }>();
-    if(!id) return
     const { isLoaded, user } = useUser();
-    const { call, isCallLoading } = useGetCallById(id);
+    const { call, isCallLoading } = useGetCallById(id || '');
     const [isSetupComplete, setIsSetupComplete] = useState(false);
 
+    if(!id) return <div>Invalid meeting ID</div>;
     if (!isLoaded || isCallLoading) return <Loading />;
 
 

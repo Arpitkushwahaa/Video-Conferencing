@@ -1,13 +1,13 @@
 'use client';
-import { SignedIn,  UserButton } from '@clerk/nextjs'
+import { SignedIn } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import { navLinks } from '@/constants';
-import { neobrutalism } from '@clerk/themes'
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import CustomUserButton from './CustomUserButton';
 
 
 const NavBar = () => {
@@ -89,14 +89,8 @@ const NavBar = () => {
               {/* User button */}
               <div className='hover:scale-150 duration-500 '>
                 <SignedIn>
-                    {/* Mount the UserButton component */}
-                    <UserButton
-                      appearance={{
-                        baseTheme: neobrutalism,
-                      }}
-                    />
+                    <CustomUserButton />
                 </SignedIn>
-        
               </div>
           </nav>
 

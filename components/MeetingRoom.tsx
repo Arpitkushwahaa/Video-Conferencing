@@ -9,22 +9,28 @@ import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { LayoutList, Users } from "lucide-react";
+import { LayoutList, Users, MessageCircle } from "lucide-react";
 import EndCallButton from "./EndCallButton";
 import { useResponsive } from "@/hooks/useResponsive";
 import ParticipantCount from "./ParticipantCount";
+import EnhancedChat from "./EnhancedChat";
 
 type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
 
 const MeetingRoom = () => {
     const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
     const [showParticipants, setShowParticipants] = useState(false);
+    const [showChat, setShowChat] = useState(false);
+    const [chatUnreadCount, setChatUnreadCount] = useState(0);
     const router = useRouter();
     const pathname = usePathname()  
     const { user } = useUser();
     const { isMobile, isTablet, isDesktop } = useResponsive();
     const { useCallCallingState } = useCallStateHooks();
     const callingState = useCallCallingState();
+
+    // Extract meeting ID from pathname
+    const meetingId = pathname.split('/').pop() || 'default-meeting';
 
     // Auto-adjust layout based on screen size
     useEffect(() => {
@@ -77,7 +83,7 @@ const MeetingRoom = () => {
                     navigator.clipboard.writeText(meetingLink);
                     toast('Meeting Link Copied',{ 
                     duration: 3000,
-                    className: '!bg-gray-300 !rounded-3xl !py-8 !px-5 !justify-center',
+                    className: '!bg-green-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-green-500/20',
                 });
                 }}
                 >
@@ -135,9 +141,34 @@ const MeetingRoom = () => {
                     </div>
                     </button>
                     
+                    <button onClick={() => setShowChat((prev) => !prev)}>
+                    <div className={`cursor-pointer rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 transition-all duration-300 shadow-lg border relative ${
+                        showChat 
+                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 border-blue-400/20' 
+                            : 'bg-gradient-to-r from-gray-700 to-gray-800 border-gray-600/20 hover:from-gray-600 hover:to-gray-700'
+                    }`}>
+                        <MessageCircle size={18} className="text-white sm:w-5 sm:h-5" />
+                        {chatUnreadCount > 0 && !showChat && (
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center animate-pulse">
+                                {chatUnreadCount > 99 ? '99+' : chatUnreadCount}
+                            </span>
+                        )}
+                    </div>
+                    </button>
+                    
                     <EndCallButton />
                 </div>
             </div>
+
+            {/* Chat Component */}
+            <EnhancedChat 
+                isOpen={showChat}
+                onToggle={() => setShowChat(!showChat)}
+                meetingId={meetingId}
+                isMobile={isMobile}
+                showFloatingButton={false}
+                onUnreadCountChange={setChatUnreadCount}
+            />
          </section>
       )
 

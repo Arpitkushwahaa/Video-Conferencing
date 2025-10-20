@@ -5,7 +5,7 @@ export const setupErrorHandler = () => {
     const originalWarn = console.warn;
 
     // Override console.error to filter out Stream SDK screen sharing errors
-    console.error = (...args: any[]) => {
+    console.error = (...args: unknown[]) => {
         const message = args.join(' ');
         
         // Filter out specific Stream SDK screen sharing permission errors
@@ -24,7 +24,7 @@ export const setupErrorHandler = () => {
     };
 
     // Override console.warn to filter out Stream SDK warnings
-    console.warn = (...args: any[]) => {
+    console.warn = (...args: unknown[]) => {
         const message = args.join(' ');
         
         // Filter out specific Stream SDK warnings

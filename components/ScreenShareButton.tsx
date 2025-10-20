@@ -21,13 +21,13 @@ const ScreenShareButton = () => {
             // Placeholder for screen sharing functionality
             toast('Screen sharing feature coming soon!', {
                 duration: 2000,
-                className: '!bg-gray-300 !rounded-3xl !py-8 !px-5 !justify-center',
+                className: '!bg-blue-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-blue-500/20',
             });
         } catch (error) {
             console.error('Screen sharing error:', error);
             toast('An error occurred with screen sharing', {
                 duration: 3000,
-                className: '!bg-red-300 !rounded-3xl !py-8 !px-5 !justify-center',
+                className: '!bg-red-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-red-500/20',
             });
         } finally {
             setIsLoading(false);

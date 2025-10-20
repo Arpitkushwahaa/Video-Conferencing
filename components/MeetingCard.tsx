@@ -76,7 +76,7 @@ const MeetingCard = ({
                 navigator.clipboard.writeText(link); // Copy link to clipboard
                 toast("Link Copied",{
                   duration: 3000,
-                  className: '!bg-gray-300 !rounded-3xl !py-8 !px-5 !justify-center'
+                  className: '!bg-green-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-green-500/20'
                 });
               }}
             >

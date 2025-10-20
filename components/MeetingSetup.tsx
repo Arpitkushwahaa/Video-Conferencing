@@ -12,33 +12,32 @@ const MeetingSetup = ({
     setIsSetupComplete: (value: boolean) => void;
   }) => {
 
-    const {user} = useUser()
-    if(!user) return
-
+    const {user} = useUser();
     const call = useCall();
+    const { useCallEndedAt, useCallStartsAt } = useCallStateHooks();
+    const callStartsAt = useCallStartsAt();
+    const callEndedAt = useCallEndedAt();
+    const [isMicCamToggled, setIsMicCamToggled] = useState(false);
+
+    const callTimeNotArrived =
+        callStartsAt && new Date(callStartsAt) > new Date();
+    const callHasEnded = !!callEndedAt;
+
+    useEffect(() => {
+        if (call && isMicCamToggled) {
+          call.camera.disable();
+          call.microphone.disable();
+        } else if (call) {
+          call.camera.enable();
+          call.microphone.enable();
+        }
+      }, [isMicCamToggled, call]);
+
+    if(!user) return <Alert title="Please sign in to join the meeting" />;
+
     if (!call) {
-        throw new Error(
-          'useStreamCall must be used within a StreamCall component.',
-        );
-      }
-
-        const { useCallEndedAt, useCallStartsAt } = useCallStateHooks();
-        const callStartsAt = useCallStartsAt();
-        const callEndedAt = useCallEndedAt();
-        const callTimeNotArrived =
-            callStartsAt && new Date(callStartsAt) > new Date();
-        const callHasEnded = !!callEndedAt;
-        const [isMicCamToggled, setIsMicCamToggled] = useState(false);
-
-        useEffect(() => {
-            if (isMicCamToggled) {
-              call.camera.disable();
-              call.microphone.disable();
-            } else {
-              call.camera.enable();
-              call.microphone.enable();
-            }
-          }, [isMicCamToggled, call.camera, call.microphone]);
+        return <Alert title="Call not found" />;
+    }
 
 
         if (callTimeNotArrived)

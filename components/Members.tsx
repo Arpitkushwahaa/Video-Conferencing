@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from "@/lib/utils" // Utility function for conditional class names
-import { Call } from "@stream-io/video-react-sdk" // Importing Call type from Stream SDK
+import { Call, MemberResponse } from "@stream-io/video-react-sdk" // Importing Call type from Stream SDK
 import Image from "next/image" // Next.js Image component for optimized images
 import { useEffect, useState } from "react" // React hooks for state and effects
 
@@ -12,17 +12,18 @@ type MembersProps = {
 
 // Members component to display meeting participants
 const Members = ({ call }: MembersProps) => {
-    if(!call) return // If no call is provided, return nothing
-    
-    const [callMembers, setCallMembers] = useState<any[]>([]) // State to store call members
+    const [callMembers, setCallMembers] = useState<MemberResponse[]>([]) // State to store call members
     
     useEffect(() => {
+        if (!call) return;
         const getMembers = async () => {
             const members = await call.queryMembers() // Fetching call members
             setCallMembers(members.members) // Updating state with members
         }
         getMembers()
-    }, []) // Runs once when component mounts
+    }, [call]) // Include call dependency
+    
+    if(!call) return null; // If no call is provided, return nothing
     
     // If there are members in the call, render their avatars
     if(callMembers.length > 0) {
@@ -30,6 +31,7 @@ const Members = ({ call }: MembersProps) => {
             <div className="relative flex w-full">
               {callMembers.map((member, index) => {
                 const user = member.user // Extract user details from member object
+                if (!user.image) return null; // Skip if no image
                 return (
                     <Image
                       key={user.id} // Unique key for React list rendering

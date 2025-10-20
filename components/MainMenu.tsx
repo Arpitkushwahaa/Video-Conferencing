@@ -38,7 +38,7 @@ const MainMenu = () => {
         if (!values.dateTime) {
           toast('Please select a date and time',{
              duration: 3000,
-            className: 'bg-gray-300 rounded-3xl py-8 px-5 justify-center'
+            className: '!bg-orange-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-orange-500/20'
           });
           return;
         }
@@ -66,7 +66,7 @@ const MainMenu = () => {
           router.push(`/meeting/${call.id}`);
           toast('Setting up your meeting',{
             duration: 3000,
-            className: '!bg-gray-300 !rounded-3xl !py-8 !px-5 !justify-center',
+            className: '!bg-blue-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-blue-500/20',
           });
         } 
 
@@ -74,14 +74,15 @@ const MainMenu = () => {
           router.push('/upcoming')
           toast(`Your meeting is scheduled at ${values.dateTime}`,{
             duration: 5000,
-            className: '!bg-gray-300 !rounded-3xl !py-8 !px-5 !justify-center',
+            className: '!bg-purple-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-purple-500/20',
           });
         }
 
-      } catch(err: any) {
-        toast(`Failed to create Meeting ${err.message}`,{
+      } catch(err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        toast(`Failed to create Meeting ${errorMessage}`,{
           duration: 3000,
-          className: '!bg-gray-300 !rounded-3xl !py-8 !px-5 !justify-center',
+          className: '!bg-red-600 !text-white !font-semibold !rounded-3xl !py-8 !px-5 !justify-center !shadow-lg !border !border-red-500/20',
         }
         )
       }

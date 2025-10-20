@@ -260,3 +260,83 @@
     width: 100%;
   }
 }
+
+/* Chat animations */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for chat */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-gray-600 {
+  scrollbar-color: #4b5563 transparent;
+}
+
+.scrollbar-track-transparent {
+  scrollbar-track-color: transparent;
+}
+
+/* Chat text handling improvements */
+.chat-message-text {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  white-space: pre-wrap;
+  max-width: 100%;
+}
+
+/* Auto-resize textarea */
+.chat-input {
+  resize: none;
+  min-height: 40px;
+  max-height: 120px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+/* Responsive chat container */
+.chat-container {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Prevent layout shift on chat open */
+.chat-floating-enter {
+  transform: scale(0.95) translateY(20px);
+  opacity: 0;
+}
+
+.chat-floating-enter-active {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  transition: all 200ms ease-out;
+}
+
+/* Better mobile chat handling */
+@media (max-width: 640px) {
+  .chat-mobile {
+    inset: 8px;
+    top: 64px;
+    max-height: calc(100vh - 80px);
+  }
+  
+  .chat-mobile .chat-input {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
